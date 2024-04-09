@@ -2094,7 +2094,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     visible     = (not rvc_globals.NotesOrHertz) and (f0method0.value != 'rmvpe'),
                                 )
                                 maxpitch_txtbox = gr.Textbox(
-                                    label       = i18n
+                                    label       = i18n("Max pitch:"),
                                     info        = i18n("Specify max pitch for inference [NOTE][OCTAVE]"),
                                     placeholder = "C6",
                                     visible     = (rvc_globals.NotesOrHertz) and (f0method0.value != 'rmvpe'),
