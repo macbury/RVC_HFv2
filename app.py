@@ -1738,6 +1738,15 @@ import edge_tts
 import asyncio
 
 
+def change_choices_fix():
+    audio_paths=[]
+    for filename in os.listdir("./audios"):
+        if filename.endswith(('wav', 'mp3', 'flac', 'ogg', 'opus',
+                'm4a', 'mp4', 'aac', 'alac', 'wma',
+                'aiff', 'webm', 'ac3')):
+            audio_paths.append(os.path.join('./audios',filename).replace('\\', '/'))
+    print(audio_paths)
+    return {"choices": sorted(audio_paths), "__type__": "update"}
 
 
 def custom_voice(
@@ -1985,10 +1994,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 input_audio1.select(fn=lambda:'',inputs=[],outputs=[input_audio0])
                                 input_audio0.input(fn=lambda:'',inputs=[],outputs=[input_audio1])
                                 
-                                dropbox.upload(fn=save_to_wav2, inputs=[dropbox], outputs=[input_audio0])
-                                dropbox.upload(fn=easy_infer.change_choices2, inputs=[], outputs=[input_audio1])
-                                record_button.change(fn=save_to_wav, inputs=[record_button], outputs=[input_audio0])
-                                record_button.change(fn=easy_infer.change_choices2, inputs=[], outputs=[input_audio1])
+                                dropbox.upload(fn=save_to_wav2, inputs=[dropbox], outputs=[input_audio0]).then(fn=change_choices_fix, inputs=[], outputs=[input_audio1])
+                                record_button.change(fn=save_to_wav, inputs=[record_button], outputs=[input_audio0]).then(fn=change_choices_fix, inputs=[], outputs=[input_audio1])
 
                             best_match_index_path1 = match_index(sid0.value) # Get initial index from default sid0 (first voice model in list)
 
@@ -2087,7 +2094,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     visible     = (not rvc_globals.NotesOrHertz) and (f0method0.value != 'rmvpe'),
                                 )
                                 maxpitch_txtbox = gr.Textbox(
-                                    label       = i18n("Max pitch:"),
+                                    label       = i18n
                                     info        = i18n("Specify max pitch for inference [NOTE][OCTAVE]"),
                                     placeholder = "C6",
                                     visible     = (rvc_globals.NotesOrHertz) and (f0method0.value != 'rmvpe'),
@@ -2941,7 +2948,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 vc_output2 = gr.Audio(label=i18n("Export audio (click on the three dots in the lower right corner to download)"), type='filepath')
                                 
                                 dropbox.upload(fn=save_to_wav2, inputs=[dropbox], outputs=[input_audio1])
-                                dropbox.upload(fn=easy_infer.change_choices2, inputs=[], outputs=[input_audio1])
+                                dropbox.upload(fn=change_choices_fix, inputs=[], outputs=[input_audio1])
 
                                 refresh_button.click(
                                     fn=lambda: change_choices3(),
