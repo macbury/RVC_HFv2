@@ -1746,7 +1746,10 @@ def change_choices_fix():
                 'aiff', 'webm', 'ac3')):
             audio_paths.append(os.path.join('./audios',filename).replace('\\', '/'))
     print(audio_paths)
-    return {"choices": sorted(audio_paths), "__type__": "update"}
+    most_recent_audio = ""
+    if audio_paths:
+        most_recent_audio = max(audio_paths, key=os.path.getctime)
+    return {"choices": sorted(audio_paths), "value": most_recent_audio, "__type__": "update"}
 
 
 def custom_voice(
