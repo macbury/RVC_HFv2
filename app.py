@@ -1950,7 +1950,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
 
     with gr.Blocks(theme='JohnSmith9982/small_and_pretty', title="Applio") as app:
         gr.Markdown("🍏 Applio (Mangio-RVC-Fork HF)")
-        gr.Markdown("More spaces: [Aesthetic_RVC_Inference_HF](https://huggingface.co/spaces/r3gm/Aesthetic_RVC_Inference_HF), [AICoverGen](https://huggingface.co/spaces/r3gm/AICoverGen), [Ultimate-Vocal-Remover-WebUI](https://huggingface.co/spaces/r3gm/Ultimate-Vocal-Remover-WebUI), [Advanced-RVC-Inference](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)")
+        gr.Markdown("More spaces: [RVC⚡ZERO](https://huggingface.co/spaces/r3gm/rvc_zero), [Aesthetic_RVC_Inference_HF](https://huggingface.co/spaces/r3gm/Aesthetic_RVC_Inference_HF), [AICoverGen](https://huggingface.co/spaces/r3gm/AICoverGen), [Ultimate-Vocal-Remover-WebUI](https://huggingface.co/spaces/r3gm/Ultimate-Vocal-Remover-WebUI), [Advanced-RVC-Inference](https://huggingface.co/spaces/r3gm/Advanced-RVC-Inference)")
         gr.HTML("<h4> The current space only uses CPU, so it's only for inference. If you have issues with the queue, I recommend duplicating the space. </h4>")
         gr.Markdown(
             "[![Duplicate this Space](https://huggingface.co/datasets/huggingface/badges/raw/main/duplicate-this-space-sm-dark.svg)](https://huggingface.co/spaces/r3gm/RVC_HF?duplicate=true)\n\n"
