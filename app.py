@@ -1,155 +1,155 @@
-import os, sys
-os.system("pip install pyworld") # ==0.3.3
+# import os, sys
+# os.system("pip install pyworld") # ==0.3.3
 
-now_dir = os.getcwd()
-sys.path.append(now_dir)
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-os.environ["no_proxy"] = "localhost, 127.0.0.1, ::1"
+# now_dir = os.getcwd()
+# sys.path.append(now_dir)
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+# os.environ["OPENBLAS_NUM_THREADS"] = "1"
+# os.environ["no_proxy"] = "localhost, 127.0.0.1, ::1"
 
-# Download models
-shell_script = './tools/dlmodels.sh'
-os.system(f'chmod +x {shell_script}')
-os.system('apt install git-lfs')
-os.system('git lfs install')
-os.system('apt-get -y install aria2')
-os.system('aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt -d . -o hubert_base.pt')
-try:
-    return_code = os.system(shell_script)
-    if return_code == 0:
-        print("Shell script executed successfully.")
-    else:
-        print(f"Shell script failed with return code {return_code}")
-except Exception as e:
-    print(f"An error occurred: {e}")
-
-
-import logging
-import shutil
-import threading
-import lib.globals.globals as rvc_globals
-from LazyImport import lazyload
-import mdx
-from mdx_processing_script import get_model_list,id_to_ptm,prepare_mdx,run_mdx
-math = lazyload('math')
-import traceback
-import warnings
-tensorlowest = lazyload('tensorlowest')
-from random import shuffle
-from subprocess import Popen
-from time import sleep
-import json
-import pathlib
-
-import fairseq
-logging.getLogger("faiss").setLevel(logging.WARNING)
-import faiss
-gr = lazyload("gradio")
-np = lazyload("numpy")
-torch = lazyload('torch')
-re = lazyload('regex')
-SF = lazyload("soundfile")
-SFWrite = SF.write
-from dotenv import load_dotenv
-from sklearn.cluster import MiniBatchKMeans
-import datetime
+# # Download models
+# shell_script = './tools/dlmodels.sh'
+# os.system(f'chmod +x {shell_script}')
+# os.system('apt install git-lfs')
+# os.system('git lfs install')
+# os.system('apt-get -y install aria2')
+# os.system('aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt -d . -o hubert_base.pt')
+# try:
+#     return_code = os.system(shell_script)
+#     if return_code == 0:
+#         print("Shell script executed successfully.")
+#     else:
+#         print(f"Shell script failed with return code {return_code}")
+# except Exception as e:
+#     print(f"An error occurred: {e}")
 
 
-from glob import glob1
-import signal
-from signal import SIGTERM
-import librosa
+# import logging
+# import shutil
+# import threading
+# import lib.globals.globals as rvc_globals
+# from LazyImport import lazyload
+# import mdx
+# from mdx_processing_script import get_model_list,id_to_ptm,prepare_mdx,run_mdx
+# math = lazyload('math')
+# import traceback
+# import warnings
+# tensorlowest = lazyload('tensorlowest')
+# from random import shuffle
+# from subprocess import Popen
+# from time import sleep
+# import json
+# import pathlib
 
-from configs.config import Config
-from i18n import I18nAuto
-from infer.lib.train.process_ckpt import (
-    change_info,
-    extract_small_model,
-    merge,
-    show_info,
-)
-#from infer.modules.uvr5.modules import uvr
-from infer.modules.vc.modules import VC
-from infer.modules.vc.utils import *
-from infer.modules.vc.pipeline import Pipeline
-import lib.globals.globals as rvc_globals
-math = lazyload('math')
-ffmpeg = lazyload('ffmpeg')
-import nltk
-nltk.download('punkt', quiet=True)
-from nltk.tokenize import sent_tokenize
-from bark import SAMPLE_RATE
-
-import easy_infer
-import audioEffects
-from infer.lib.csvutil import CSVutil
-
-from lib.infer_pack.models import (
-    SynthesizerTrnMs256NSFsid,
-    SynthesizerTrnMs256NSFsid_nono,
-    SynthesizerTrnMs768NSFsid,
-    SynthesizerTrnMs768NSFsid_nono,
-)
-from lib.infer_pack.models_onnx import SynthesizerTrnMsNSFsidM
-from infer_uvr5 import _audio_pre_, _audio_pre_new
-from MDXNet import MDXNetDereverb
-from infer.lib.audio import load_audio
+# import fairseq
+# logging.getLogger("faiss").setLevel(logging.WARNING)
+# import faiss
+# gr = lazyload("gradio")
+# np = lazyload("numpy")
+# torch = lazyload('torch')
+# re = lazyload('regex')
+# SF = lazyload("soundfile")
+# SFWrite = SF.write
+# from dotenv import load_dotenv
+# from sklearn.cluster import MiniBatchKMeans
+# import datetime
 
 
-from sklearn.cluster import MiniBatchKMeans
+# from glob import glob1
+# import signal
+# from signal import SIGTERM
+# import librosa
 
-import time
-import csv
+# from configs.config import Config
+# from i18n import I18nAuto
+# from infer.lib.train.process_ckpt import (
+#     change_info,
+#     extract_small_model,
+#     merge,
+#     show_info,
+# )
+# #from infer.modules.uvr5.modules import uvr
+# from infer.modules.vc.modules import VC
+# from infer.modules.vc.utils import *
+# from infer.modules.vc.pipeline import Pipeline
+# import lib.globals.globals as rvc_globals
+# math = lazyload('math')
+# ffmpeg = lazyload('ffmpeg')
+# import nltk
+# nltk.download('punkt', quiet=True)
+# from nltk.tokenize import sent_tokenize
+# from bark import SAMPLE_RATE
 
-from shlex import quote as SQuote
+# import easy_infer
+# import audioEffects
+# from infer.lib.csvutil import CSVutil
+
+# from lib.infer_pack.models import (
+#     SynthesizerTrnMs256NSFsid,
+#     SynthesizerTrnMs256NSFsid_nono,
+#     SynthesizerTrnMs768NSFsid,
+#     SynthesizerTrnMs768NSFsid_nono,
+# )
+# from lib.infer_pack.models_onnx import SynthesizerTrnMsNSFsidM
+# from infer_uvr5 import _audio_pre_, _audio_pre_new
+# from MDXNet import MDXNetDereverb
+# from infer.lib.audio import load_audio
+
+
+# from sklearn.cluster import MiniBatchKMeans
+
+# import time
+# import csv
+
+# from shlex import quote as SQuote
 
 
 
 
-RQuote = lambda val: SQuote(str(val))
+# RQuote = lambda val: SQuote(str(val))
 
-tmp = os.path.join(now_dir, "TEMP")
-runtime_dir = os.path.join(now_dir, "runtime/Lib/site-packages")
-directories = ['logs', 'audios', 'datasets', 'weights', 'audio-others' , 'audio-outputs']
+# tmp = os.path.join(now_dir, "TEMP")
+# runtime_dir = os.path.join(now_dir, "runtime/Lib/site-packages")
+# directories = ['logs', 'audios', 'datasets', 'weights', 'audio-others' , 'audio-outputs']
 
-shutil.rmtree(tmp, ignore_errors=True)
-shutil.rmtree("%s/runtime/Lib/site-packages/infer_pack" % (now_dir), ignore_errors=True)
-shutil.rmtree("%s/runtime/Lib/site-packages/uvr5_pack" % (now_dir), ignore_errors=True)
+# shutil.rmtree(tmp, ignore_errors=True)
+# shutil.rmtree("%s/runtime/Lib/site-packages/infer_pack" % (now_dir), ignore_errors=True)
+# shutil.rmtree("%s/runtime/Lib/site-packages/uvr5_pack" % (now_dir), ignore_errors=True)
 
-os.makedirs(tmp, exist_ok=True)
-for folder in directories:
-    os.makedirs(os.path.join(now_dir, folder), exist_ok=True)
-
-
-os.makedirs(tmp, exist_ok=True)
-os.makedirs(os.path.join(now_dir, "logs"), exist_ok=True)
-os.makedirs(os.path.join(now_dir, "assets/weights"), exist_ok=True)
-os.environ["TEMP"] = tmp
-warnings.filterwarnings("ignore")
-torch.manual_seed(114514)
-logging.getLogger("numba").setLevel(logging.WARNING)
-
-logger = logging.getLogger(__name__)
+# os.makedirs(tmp, exist_ok=True)
+# for folder in directories:
+#     os.makedirs(os.path.join(now_dir, folder), exist_ok=True)
 
 
-if not os.path.isdir("csvdb/"):
-    os.makedirs("csvdb")
-    frmnt, stp = open("csvdb/formanting.csv", "w"), open("csvdb/stop.csv", "w")
-    frmnt.close()
-    stp.close()
+# os.makedirs(tmp, exist_ok=True)
+# os.makedirs(os.path.join(now_dir, "logs"), exist_ok=True)
+# os.makedirs(os.path.join(now_dir, "assets/weights"), exist_ok=True)
+# os.environ["TEMP"] = tmp
+# warnings.filterwarnings("ignore")
+# torch.manual_seed(114514)
+# logging.getLogger("numba").setLevel(logging.WARNING)
 
-global DoFormant, Quefrency, Timbre
+# logger = logging.getLogger(__name__)
 
-try:
-    DoFormant, Quefrency, Timbre = CSVutil("csvdb/formanting.csv", "r", "formanting")
-    DoFormant = (
-        lambda DoFormant: True
-        if DoFormant.lower() == "true"
-        else (False if DoFormant.lower() == "false" else DoFormant)
-    )(DoFormant)
-except (ValueError, TypeError, IndexError):
-    DoFormant, Quefrency, Timbre = False, 1.0, 1.0
-    CSVutil("csvdb/formanting.csv", "w+", "formanting", DoFormant, Quefrency, Timbre)
+
+# if not os.path.isdir("csvdb/"):
+#     os.makedirs("csvdb")
+#     frmnt, stp = open("csvdb/formanting.csv", "w"), open("csvdb/stop.csv", "w")
+#     frmnt.close()
+#     stp.close()
+
+# global DoFormant, Quefrency, Timbre
+
+# try:
+#     DoFormant, Quefrency, Timbre = CSVutil("csvdb/formanting.csv", "r", "formanting")
+#     DoFormant = (
+#         lambda DoFormant: True
+#         if DoFormant.lower() == "true"
+#         else (False if DoFormant.lower() == "false" else DoFormant)
+#     )(DoFormant)
+# except (ValueError, TypeError, IndexError):
+#     DoFormant, Quefrency, Timbre = False, 1.0, 1.0
+#     CSVutil("csvdb/formanting.csv", "w+", "formanting", DoFormant, Quefrency, Timbre)
 
 load_dotenv()
 config = Config()
@@ -250,22 +250,22 @@ names        = [os.path.join(root, file)
                if file.endswith((".pth", ".onnx"))]
 
 indexes_list = [os.path.join(root, name)
-               for root, _, files in os.walk(index_root, topdown=False) 
-               for name in files 
+               for root, _, files in os.walk(index_root, topdown=False)
+               for name in files
                if name.endswith(".index") and "trained" not in name]
 
 audio_paths  = [os.path.join(root, name)
-               for root, _, files in os.walk(audio_root, topdown=False) 
+               for root, _, files in os.walk(audio_root, topdown=False)
                for name in files
                if name.endswith(tuple(sup_audioext))]
 
 audio_others_paths  = [os.path.join(root, name)
-               for root, _, files in os.walk(audio_others_root, topdown=False) 
+               for root, _, files in os.walk(audio_others_root, topdown=False)
                for name in files
                if name.endswith(tuple(sup_audioext))]
 
-uvr5_names  = [name.replace(".pth", "") 
-              for name in os.listdir(weight_uvr5_root) 
+uvr5_names  = [name.replace(".pth", "")
+              for name in os.listdir(weight_uvr5_root)
               if name.endswith(".pth") or "onnx" in name]
 
 
@@ -281,7 +281,7 @@ def get_dataset():
         return sorted(datasets)[0]
     else:
         return ''
-    
+
 def update_model_choices(select_value):
     model_ids = get_model_list()
     model_ids_list = list(model_ids)
@@ -299,7 +299,7 @@ def update_tts_methods_voice(select_value):
         return {"choices": set_edge_voice, "value": "", "__type__": "update"}
     elif select_value == "Bark-tts":
         return {"choices": set_bark_voice, "value": "", "__type__": "update"}
-    
+
 
 def update_dataset_list(name):
     new_datasets = []
@@ -315,7 +315,7 @@ def get_indexes():
         for filename in filenames
         if filename.endswith(".index") and "trained" not in filename
     ]
-    
+
     return indexes_list if indexes_list else ''
 
 def get_fshift_presets():
@@ -325,7 +325,7 @@ def get_fshift_presets():
         for filename in filenames
         if filename.endswith(".txt")
     ]
-    
+
     return fshift_presets_list if fshift_presets_list else ''
 
 import soundfile as sf
@@ -390,14 +390,14 @@ def audio_combined(audio1_path, audio2_path, volume_factor_audio1=1.0, volume_fa
         output_path = generate_output_path(output_folder, base_name, extension)
         # Combina el audio procesado con el segundo audio usando audio_combined
         combine_and_save_audios(audio1_path, processed_audio_path, output_path, volume_factor_audio1, volume_factor_audio2)
-        
+
         return i18n("Conversion complete!"), output_path
     else:
         base_name = "combined_audio"
         output_path = generate_output_path(output_folder, base_name, extension)
         # No hay efectos habilitados, combina directamente los audios sin procesar
         combine_and_save_audios(audio1_path, audio2_path, output_path, volume_factor_audio1, volume_factor_audio2)
-        
+
         return i18n("Conversion complete!"), output_path
 
 
@@ -408,28 +408,28 @@ def uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format
     if architecture == "VR":
        try:
            inp_root, save_root_vocal, save_root_ins = [x.strip(" ").strip('"').strip("\n").strip('"').strip(" ") for x in [inp_root, save_root_vocal, save_root_ins]]
-           usable_files = [os.path.join(inp_root, file) 
-                          for file in os.listdir(inp_root) 
-                          if file.endswith(tuple(sup_audioext))]    
-           
-        
+           usable_files = [os.path.join(inp_root, file)
+                          for file in os.listdir(inp_root)
+                          if file.endswith(tuple(sup_audioext))]
+
+
            pre_fun = MDXNetDereverb(15) if model_name == "onnx_dereverb_By_FoxJoy" else (_audio_pre_ if "DeEcho" not in model_name else _audio_pre_new)(
                        agg=int(agg),
                        model_path=os.path.join(weight_uvr5_root, model_name + ".pth"),
                        device=config.device,
                        is_half=config.is_half,
                    )
-                
+
            try:
               if paths != None:
                 paths = [path.name for path in paths]
               else:
                 paths = usable_files
-                
+
            except:
                 traceback.print_exc()
                 paths = usable_files
-           print(paths) 
+           print(paths)
            for path in paths:
                inp_path = os.path.join(inp_root, path)
                need_reformat, done = 1, 0
@@ -480,20 +480,20 @@ def uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format
            infos.append(i18n("Starting audio conversion... (This might take a moment)"))
            yield "\n".join(infos)
            inp_root, save_root_vocal, save_root_ins = [x.strip(" ").strip('"').strip("\n").strip('"').strip(" ") for x in [inp_root, save_root_vocal, save_root_ins]]
-        
-           usable_files = [os.path.join(inp_root, file) 
-                          for file in os.listdir(inp_root) 
-                          if file.endswith(tuple(sup_audioext))]    
+
+           usable_files = [os.path.join(inp_root, file)
+                          for file in os.listdir(inp_root)
+                          if file.endswith(tuple(sup_audioext))]
            try:
               if paths != None:
                 paths = [path.name for path in paths]
               else:
                 paths = usable_files
-                
+
            except:
                 traceback.print_exc()
                 paths = usable_files
-           print(paths) 
+           print(paths)
            invert=True
            denoise=True
            use_custom_parameter=True
@@ -508,14 +508,14 @@ def uvr(model_name, inp_root, save_root_vocal, paths, save_root_ins, agg, format
            onnx = id_to_ptm(model_name)
            compensation = compensation if use_custom_compensation or use_custom_parameter else None
            mdx_model = prepare_mdx(onnx,use_custom_parameter, dim_f, dim_t, n_fft, compensation=compensation)
-           
-       
+
+
            for path in paths:
                #inp_path = os.path.join(inp_root, path)
                suffix_naming = suffix if use_custom_parameter else None
                diff_suffix_naming = suffix_invert if use_custom_parameter else None
                run_mdx(onnx, mdx_model, path, format0, diff=invert,suffix=suffix_naming,diff_suffix=diff_suffix_naming,denoise=denoise)
-    
+
            if print_settings:
                print()
                print('[MDX-Net_Colab settings used]')
@@ -556,11 +556,11 @@ def change_choices():
                    if file.endswith((".pth", ".onnx"))]
     indexes_list = [os.path.join(root, name) for root, _, files in os.walk(index_root, topdown=False) for name in files if name.endswith(".index") and "trained" not in name]
     audio_paths  = [os.path.join(audio_root, file) for file in os.listdir(os.path.join(now_dir, "audios"))]
-    
+
 
     return (
-        {"choices": sorted(names), "__type__": "update"}, 
-        {"choices": sorted(indexes_list), "__type__": "update"}, 
+        {"choices": sorted(names), "__type__": "update"},
+        {"choices": sorted(indexes_list), "__type__": "update"},
         {"choices": sorted(audio_paths), "__type__": "update"}
     )
 def change_choices2():
@@ -569,17 +569,17 @@ def change_choices2():
                    for file in files
                    if file.endswith((".pth", ".onnx"))]
     indexes_list = [os.path.join(root, name) for root, _, files in os.walk(index_root, topdown=False) for name in files if name.endswith(".index") and "trained" not in name]
-    
+
 
     return (
-        {"choices": sorted(names), "__type__": "update"}, 
-        {"choices": sorted(indexes_list), "__type__": "update"}, 
+        {"choices": sorted(names), "__type__": "update"},
+        {"choices": sorted(indexes_list), "__type__": "update"},
     )
 def change_choices3():
-    
+
     audio_paths  = [os.path.join(audio_root, file) for file in os.listdir(os.path.join(now_dir, "audios"))]
     audio_others_paths  = [os.path.join(audio_others_root, file) for file in os.listdir(os.path.join(now_dir, "audio-others"))]
-    
+
 
     return (
         {"choices": sorted(audio_others_paths), "__type__": "update"},
@@ -655,7 +655,7 @@ def formant_enabled(
             {"visible": False, "__type__": "update"},
             {"visible": False, "__type__": "update"},
         )
-        
+
 
 def formant_apply(qfrency, tmbre):
     Quefrency = qfrency
@@ -670,15 +670,15 @@ def formant_apply(qfrency, tmbre):
 
 def update_fshift_presets(preset, qfrency, tmbre):
 
-    if preset:  
+    if preset:
         with open(preset, 'r') as p:
             content = p.readlines()
             qfrency, tmbre = content[0].strip(), content[1]
-            
+
         formant_apply(qfrency, tmbre)
     else:
         qfrency, tmbre = preset_apply(preset, qfrency, tmbre)
-        
+
     return (
         {"choices": get_fshift_presets(), "__type__": "update"},
         {"value": qfrency, "__type__": "update"},
@@ -1207,7 +1207,7 @@ def export_onnx(model_path, exported_path):
     device = torch.device("cpu")
     checkpoint = torch.load(model_path, map_location=device)
     vec_channels = 256 if checkpoint.get("version", "v1") == "v1" else 768
-    
+
     test_inputs = {
         "phone": torch.rand(1, 200, vec_channels),
         "phone_lengths": torch.LongTensor([200]),
@@ -1216,10 +1216,10 @@ def export_onnx(model_path, exported_path):
         "ds": torch.zeros(1).long(),
         "rnd": torch.rand(1, 192, 200)
     }
-    
+
     checkpoint["config"][-3] = checkpoint["weight"]["emb_g.weight"].shape[0]
     net_g = SynthesizerTrnMsNSFsidM(*checkpoint["config"], is_half=False, version=checkpoint.get("version", "v1"))
-    
+
     net_g.load_state_dict(checkpoint["weight"], strict=False)
     net_g = net_g.to(device)
 
@@ -1721,7 +1721,7 @@ def save_to_wav2_edited(dropbox):
             print('Replacing old dropdown file...')
 
         shutil.move(file_path, target_path)
-    return       
+    return
 def save_to_wav2(dropbox):
     file_path = dropbox.name
     target_path = os.path.join('audios', os.path.basename(file_path))
@@ -1732,7 +1732,7 @@ def save_to_wav2(dropbox):
 
     shutil.move(file_path, target_path)
     return target_path
-    
+
 from gtts import gTTS
 import edge_tts
 import asyncio
@@ -1838,9 +1838,9 @@ def __bark__(text, voice_preset):
 
 
 
-def make_test( 
-        tts_text, 
-        tts_voice, 
+def make_test(
+        tts_text,
+        tts_voice,
         model_path,
         index_path,
         transpose,
@@ -1853,7 +1853,7 @@ def make_test(
 
         if tts_voice == None:
             return
-        
+
         filename = os.path.join(now_dir, "audio-outputs", "converted_tts.wav")
         if "SET_LIMIT" == os.getenv("DEMO"):
           if len(tts_text) > 60:
@@ -1875,7 +1875,7 @@ def make_test(
                 tts = gTTS('a', lang=language)
                 tts.save(filename)
                 print('Error: Audio will be replaced.')
-    
+
             os.system("cp audio-outputs/converted_tts.wav audio-outputs/real_tts.wav")
 
             custom_voice(
@@ -1893,7 +1893,7 @@ def make_test(
             return os.path.join(now_dir, "audio-outputs", "converted_tts.wav"), os.path.join(now_dir, "audio-outputs", "real_tts.wav")
         elif tts_method == "Bark-tts":
             try:
-                
+
                 script = tts_text.replace("\n", " ").strip()
                 sentences = sent_tokenize(script)
                 print(sentences)
@@ -1903,7 +1903,7 @@ def make_test(
                 for sentence in sentences:
                     audio_array , _ = __bark__(sentence, tts_voice.split("-")[0])
                     pieces += [audio_array, silence.copy()]
-            
+
                 sf.write(
                     file= nombre_archivo,
                     samplerate=SAMPLE_RATE,
@@ -1937,16 +1937,16 @@ def make_test(
 
             except Exception as e:
                 print(f"{e}")
-                return None, None  
-            
+                return None, None
 
 
-        
-        
+
+
+
 
 def GradioSetup(UTheme=gr.themes.Soft()):
 
-    default_weight = names[0] if names else '' 
+    default_weight = names[0] if names else ''
 
     with gr.Blocks(theme='JohnSmith9982/small_and_pretty', title="Applio") as app:
         gr.Markdown("🍏 Applio (Mangio-RVC-Fork HF)")
@@ -1954,7 +1954,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
         gr.HTML("<h4> The current space only uses CPU, so it's only for inference. If you have issues with the queue, I recommend duplicating the space. </h4>")
         gr.Markdown(
             "[![Duplicate this Space](https://huggingface.co/datasets/huggingface/badges/raw/main/duplicate-this-space-sm-dark.svg)](https://huggingface.co/spaces/r3gm/RVC_HF?duplicate=true)\n\n"
-        )     
+        )
         with gr.Tabs():
             with gr.TabItem(i18n("Model Inference")):
                 with gr.Row():
@@ -1963,9 +1963,9 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                     clean_button = gr.Button(i18n("Unload voice to save GPU memory"), variant="primary")
                     clean_button.click(fn=lambda: ({"value": "", "__type__": "update"}), inputs=[], outputs=[sid0])
 
-                
+
                 with gr.TabItem(i18n("Single")):
-                    with gr.Row(): 
+                    with gr.Row():
                         spk_item = gr.Slider(
                             minimum=0,
                             maximum=2333,
@@ -1975,9 +1975,9 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                             visible=False,
                             interactive=True,
                         )
-                       
 
-                    with gr.Group(): 
+
+                    with gr.Group():
                         with gr.Row():
                             with gr.Column(): # First column for audio-related inputs
                                 dropbox = gr.File(label=i18n("Drag your audio here:"))
@@ -1993,10 +1993,10 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     value='',
                                     interactive=True,
                                 )
-                                
+
                                 input_audio1.select(fn=lambda:'',inputs=[],outputs=[input_audio0])
                                 input_audio0.input(fn=lambda:'',inputs=[],outputs=[input_audio1])
-                                
+
                                 dropbox.upload(fn=save_to_wav2, inputs=[dropbox], outputs=[input_audio0]).then(fn=change_choices_fix, inputs=[], outputs=[input_audio1])
                                 record_button.change(fn=save_to_wav, inputs=[record_button], outputs=[input_audio0]).then(fn=change_choices_fix, inputs=[], outputs=[input_audio1])
 
@@ -2024,15 +2024,15 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     vc_transform0 = gr.Number(
                                         label=i18n("Transpose (integer, number of semitones, raise by an octave: 12, lower by an octave: -12):"), value=0
                                     )
-        
+
                     # Create a checkbox for advanced settings
                     advanced_settings_checkbox = gr.Checkbox(
                         value=False,
                         label=i18n("Advanced Settings"),
                         interactive=True,
                     )
-                    
-                    # Advanced settings container        
+
+                    # Advanced settings container
                     with gr.Column(visible=False) as advanced_settings: # Initially hidden
                         with gr.Row(label = i18n("Advanced Settings"), open = False):
                             with gr.Column():
@@ -2040,7 +2040,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     label=i18n(
                                         "Select the pitch extraction algorithm:"
                                     ),
-                                    choices=["pm", "harvest", "dio", "crepe", "crepe-tiny", "mangio-crepe", "mangio-crepe-tiny", "rmvpe", "rmvpe+"], 
+                                    choices=["pm", "harvest", "dio", "crepe", "crepe-tiny", "mangio-crepe", "mangio-crepe-tiny", "rmvpe", "rmvpe+"],
                                     value="rmvpe+",
                                     interactive=True,
                                 )
@@ -2064,7 +2064,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     value=3,
                                     step=1,
                                     interactive=True,
-                                )    
+                                )
 
                                 minpitch_slider = gr.Slider(
                                     label       = i18n("Min pitch:"),
@@ -2110,7 +2110,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     value="",
                                     interactive=True,
                                 )
-                            
+
                                 with gr.Accordion(label = i18n("Custom f0 [Root pitch] File"), open = False):
                                     f0_file = gr.File(label=i18n("F0 curve file (optional). One pitch per line. Replaces the default F0 and pitch modulation:"))
 
@@ -2130,8 +2130,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 inputs=[f0method0],
                                 outputs=[minpitch_slider, minpitch_txtbox,
                                          maxpitch_slider, maxpitch_txtbox]
-                            )                            
-                            
+                            )
+
                             with gr.Column():
                                 resample_sr0 = gr.Slider(
                                     minimum=0,
@@ -2165,7 +2165,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     interactive=True,
                                     visible=True,
                                 )
-                                
+
                                 formant_preset = gr.Dropdown(
                                     value='',
                                     choices=get_fshift_presets(),
@@ -2173,13 +2173,13 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     info=i18n("Presets are located in formantshiftcfg/ folder"),
                                     visible=bool(DoFormant),
                                 )
-                                
+
                                 formant_refresh_button = gr.Button(
                                     value='\U0001f504',
                                     visible=bool(DoFormant),
                                     variant='primary',
                                 )
-                                
+
                                 qfrency = gr.Slider(
                                         value=Quefrency,
                                         info=i18n("Default value is 1.0"),
@@ -2190,7 +2190,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                         visible=bool(DoFormant),
                                         interactive=True,
                                 )
-                                    
+
                                 tmbre = gr.Slider(
                                     value=Timbre,
                                     info=i18n("Default value is 1.0"),
@@ -2204,7 +2204,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 frmntbut = gr.Button(
                                    "Apply", variant="primary", visible=bool(DoFormant)
                                 )
-                               
+
                             formant_preset.change(
                                 fn=preset_apply,
                                 inputs=[formant_preset, qfrency, tmbre],
@@ -2250,10 +2250,10 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                         inputs=[advanced_settings_checkbox],
                         outputs=[advanced_settings]
                     )
-                                               
-                    
+
+
                     but0 = gr.Button(i18n("Convert"), variant="primary").style(full_width=True)
-                    
+
                     with gr.Row(): # Defines output info + output audio download after conversion
                         vc_output1 = gr.Textbox(label=i18n("Output information:"))
                         vc_output2 = gr.Audio(label=i18n("Export audio (click on the three dots in the lower right corner to download)"))
@@ -2283,8 +2283,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 ],
                                 [vc_output1, vc_output2],
                             )
-                           
-                    
+
+
                 with gr.TabItem(i18n("Batch")): # Dont Change
                     with gr.Group(): # Markdown explanation of batch inference
                         gr.Markdown(
@@ -2334,8 +2334,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     label=i18n("Advanced Settings"),
                                     interactive=True,
                                 )
-                            
-                                # Advanced batch settings container        
+
+                                # Advanced batch settings container
                                 with gr.Row(visible=False) as advanced_settings_batch: # Initially hidden
                                     with gr.Row(label = i18n("Advanced Settings"), open = False):
                                         with gr.Column():
@@ -2365,7 +2365,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                         step=1,
                                         interactive=True,
                                     )
-                                
+
                                     with gr.Row():
                                         format1 = gr.Radio(
                                             label=i18n("Export file format"),
@@ -2373,7 +2373,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                             value="wav",
                                             interactive=True,
                                         )
-                                        
+
 
                                     with gr.Column():
                                         resample_sr1 = gr.Slider(
@@ -2401,7 +2401,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                             step=0.01,
                                             interactive=True,
                                         )
-                                vc_output3 = gr.Textbox(label=i18n("Output information:")) 
+                                vc_output3 = gr.Textbox(label=i18n("Output information:"))
                                 but1 = gr.Button(i18n("Convert"), variant="primary")
                                 but1.click(
                                     vc.vc_multi,
@@ -2436,7 +2436,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                     if not sid0.value == '':
                         spk_item, protect0, protect1 = vc.get_vc(sid0.value, protect0, protect1)
 
-                    #spk_item, protect0, protect1 = vc.get_vc(sid0.value, protect0, protect1) 
+                    #spk_item, protect0, protect1 = vc.get_vc(sid0.value, protect0, protect1)
 
                     # Function to toggle advanced settings
                     def toggle_advanced_settings_batch(checkbox):
@@ -2447,9 +2447,9 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                         fn=toggle_advanced_settings_batch,
                         inputs=[advanced_settings_batch_checkbox],
                         outputs=[advanced_settings_batch]
-                    )                           
-                    
-                
+                    )
+
+
             with gr.TabItem(i18n("Train")):
 
 
@@ -2484,7 +2484,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                         )
                 with gr.Group():
                     with gr.Accordion(label=i18n("Step 2: Skipping pitch extraction")):
-               
+
                         with gr.Row():
                         #  trainset_dir4 = gr.Textbox(
                         #      label=i18n("Enter the path of the training folder:"), value=os.path.join(now_dir, datasets_root)
@@ -2538,7 +2538,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                         interactive=True,
                                         visible=F0GPUVisible,
                                 )
-                                
+
                                 extraction_crepe_hop_length = gr.Slider(
                                     minimum=1,
                                     maximum=512,
@@ -2548,7 +2548,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     interactive=True,
                                     visible=False,
                                 )
-                                
+
                                 f0method8.change(
                                     fn=lambda radio: (
                                         {
@@ -2601,8 +2601,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     #value=20,
                                     interactive=True,
                                 )
-                        
-                            with gr.Row(): 
+
+                            with gr.Row():
                                 if_save_latest13 = gr.Checkbox(
                                         label=i18n("Whether to save only the latest .ckpt file to save hard drive space"),
                                         value=True,
@@ -2618,8 +2618,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                         value=True,
                                         interactive=True,
                                     )
-               
-                            with gr.Row():    
+
+                            with gr.Row():
                                 pretrained_G14 = gr.Textbox(
                                     lines=4,
                                     label=i18n("Load pre-trained base model G path:"),
@@ -2636,7 +2636,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     label=i18n("Provide the GPU index(es) separated by '-', like 0-1-2 for using GPUs 0, 1, and 2:"),
                                     value=gpus,
                                     interactive=True,
-                                )  
+                                )
                                 sr2.change(
                                     change_sr2,
                                     [sr2, if_f0_3, version19],
@@ -2658,7 +2658,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                                 "__type__": "update"
                                             }
                                         ), inputs=[f0method8], outputs=[extraction_crepe_hop_length])
-                                
+
                                 butstop = gr.Button(i18n("Stop training"),
                                             variant='primary',
                                             visible=False,
@@ -2666,17 +2666,17 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 but3 = gr.Button(i18n("Train model"), variant="primary", visible=True)
                                 but3.click(fn=stoptraining, inputs=[gr.Number(value=0, visible=False)], outputs=[but3, butstop])
                                 butstop.click(fn=stoptraining, inputs=[gr.Number(value=1, visible=False)], outputs=[but3, butstop])
-                                
-                                
+
+
                                 with gr.Column():
                                         info3 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=4)
                                         save_action = gr.Dropdown(label=i18n("Save type"), choices=[i18n("Save all"),i18n("Save D and G"),i18n("Save voice")], value=i18n("Choose the method"), interactive=True)
-                                        
+
                                         but7 = gr.Button(i18n("Save model"), variant="primary")
                                         but4 = gr.Button(i18n("Train feature index"), variant="primary")
-                             
-                   
-                                    
+
+
+
                                 if_save_every_weights18.change(
                                         fn=lambda if_save_every_weights: (
                                             {
@@ -2687,7 +2687,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                         inputs=[if_save_every_weights18],
                                         outputs=[save_epoch10]
                                     )
-                            
+
                             but3.click(
                                 click_train,
                                 [
@@ -2708,18 +2708,18 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 ],
                                 [info3, butstop, but3],
                             )
-                                
+
                             but4.click(train_index, [exp_dir1, version19], info3)
                             but7.click(easy_infer.save_model, [exp_dir1, save_action], info3)
                 with gr.Group():
                     with gr.Row():
                         with gr.Accordion(label=i18n("Step 5: Export lowest points on a graph of the model")):
-                        
+
                             lowestval_weight_dir = gr.Textbox(visible=False)
                             ds = gr.Textbox(visible=False)
                             weights_dir1 = gr.Textbox(visible=False, value=weights_dir)
-                            
-                                
+
+
                             with gr.Row():
                                 amntlastmdls = gr.Slider(
                                     minimum=1,
@@ -2738,25 +2738,25 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     label=i18n("Output models:"),
                                     interactive=False,
                                 ) #####
-                                
+
                             with gr.Row():
                                 infolpex = gr.Textbox(label=i18n("Output information:"), value="", max_lines=10)
                                 mdlbl = gr.Dataframe(label=i18n('Stats of selected models:'), datatype='number', type='pandas')
-                            
+
                             lpexport.click(
                                 lambda model_name: os.path.join("logs", model_name, "lowestvals"),
                                 inputs=[exp_dir1],
                                 outputs=[lowestval_weight_dir]
                             )
-                            
+
                             lpexport.click(fn=tensorlowest.main, inputs=[exp_dir1, save_epoch10, amntlastmdls], outputs=[ds])
-                            
+
                             ds.change(
                                 fn=tensorlowest.selectweights,
                                 inputs=[exp_dir1, ds, weights_dir1, lowestval_weight_dir],
                                 outputs=[infolpex, lw_mdls, mdlbl],
                             )
-            with gr.TabItem(i18n("UVR5")): # UVR section 
+            with gr.TabItem(i18n("UVR5")): # UVR section
                 with gr.Group():
                     with gr.Row():
                         with gr.Column():
@@ -2773,7 +2773,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                             wav_inputs = gr.File(
                                 file_count="multiple", label=i18n("You can also input audio files in batches. Choose one of the two options. Priority is given to reading from the folder.")
                             )
-                            
+
                         with gr.Column():
                             model_choose = gr.Dropdown(label=i18n("Model:"), choices=uvr5_names)
                             agg = gr.Slider(
@@ -2818,17 +2818,17 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 model_select
                             ],
                             [vc_output4],
-                        )    
+                        )
             with gr.TabItem(i18n("TTS")):
                 with gr.Group():
                     with gr.Column():
-                        text_test = gr.Textbox(label=i18n("Text:"), placeholder=i18n("Enter the text you want to convert to voice..."), lines=6)      
-                            
+                        text_test = gr.Textbox(label=i18n("Text:"), placeholder=i18n("Enter the text you want to convert to voice..."), lines=6)
+
                 with gr.Group():
-                    with gr.Row(): 
-                        with gr.Column(): 
+                    with gr.Row():
+                        with gr.Column():
                              tts_methods_voice = ["Edge-tts", "Bark-tts"]
-                             ttsmethod_test = gr.Dropdown(tts_methods_voice, value='Edge-tts', label = i18n('TTS Method:'), visible=True)    
+                             ttsmethod_test = gr.Dropdown(tts_methods_voice, value='Edge-tts', label = i18n('TTS Method:'), visible=True)
                              tts_test = gr.Dropdown(set_edge_voice, label = i18n('TTS Model:'), visible=True)
                              ttsmethod_test.change(
                             fn=update_tts_methods_voice,
@@ -2838,8 +2838,8 @@ def GradioSetup(UTheme=gr.themes.Soft()):
 
                         with gr.Column():
                              model_voice_path07 = gr.Dropdown(label=i18n('RVC Model:'), choices=sorted(names), value=default_weight)
-                             best_match_index_path1 = match_index(model_voice_path07.value)    
-                             
+                             best_match_index_path1 = match_index(model_voice_path07.value)
+
                              file_index2_07 = gr.Dropdown(
                                   label=i18n('Select the .index file:'),
                                   choices=get_indexes(),
@@ -2848,20 +2848,20 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                   allow_custom_value=True,
                                 )
                              #transpose_test = gr.Number(label = i18n('Transpose (integer, number Fof semitones, raise by an octave: 12, lower by an octave: -12):'), value=0, visible=True, interactive= True)
-              
-                        
-                                   
-                
+
+
+
+
                 with gr.Row():
                         refresh_button_ = gr.Button(i18n("Refresh"), variant="primary")
-                        refresh_button_.click(fn=change_choices2, inputs=[], outputs=[model_voice_path07, file_index2_07]) 
+                        refresh_button_.click(fn=change_choices2, inputs=[], outputs=[model_voice_path07, file_index2_07])
                 with gr.Row():
                             original_ttsvoice = gr.Audio(label=i18n('Audio TTS:'))
                             ttsvoice = gr.Audio(label=i18n('Audio RVC:'))
 
                 with gr.Row():
                         button_test = gr.Button(i18n("Convert"), variant="primary")
-                       
+
 
                 button_test.click(make_test, inputs=[
                                 text_test,
@@ -2876,7 +2876,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 f0_autotune,
                                 ttsmethod_test
                                 ], outputs=[ttsvoice, original_ttsvoice])
-            
+
             with gr.TabItem(i18n("Resources")):
                 gr.Markdown(f"Limit download size is {os.getenv('MAX_DOWNLOAD_SIZE')} MB, duplicate the space for modify the limit")
                 easy_infer.download_model()
@@ -2889,7 +2889,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                             value=i18n("This section contains some extra utilities that often may be in experimental phases")
                 )
                 with gr.TabItem(i18n("Merge Audios")):
-                    with gr.Group(): 
+                    with gr.Group():
                         gr.Markdown(
                             value="## " + i18n("Merge your generated audios with the instrumental")
                         )
@@ -2946,10 +2946,10 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 )
 
                                 butnone = gr.Button(i18n("Merge"), variant="primary").style(full_width=True)
-                                
+
                                 vc_output1 = gr.Textbox(label=i18n("Output information:"))
                                 vc_output2 = gr.Audio(label=i18n("Export audio (click on the three dots in the lower right corner to download)"), type='filepath')
-                                
+
                                 dropbox.upload(fn=save_to_wav2, inputs=[dropbox], outputs=[input_audio1])
                                 dropbox.upload(fn=change_choices_fix, inputs=[], outputs=[input_audio1])
 
@@ -2958,17 +2958,17 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     inputs=[],
                                     outputs=[input_audio1, input_audio3],
                                 )
-                                
+
                                 butnone.click(
                                     fn=audio_combined,
-                                    inputs=[input_audio1, input_audio3,input_audio1_scale,input_audio3_scale,reverb_,compressor_,noise_gate_], 
+                                    inputs=[input_audio1, input_audio3,input_audio1_scale,input_audio3_scale,reverb_,compressor_,noise_gate_],
                                     outputs=[vc_output1, vc_output2]
                                     )
-                                    
-                        
+
+
                 with gr.TabItem(i18n("Processing")):
                     with gr.Group():
-                      
+
                         with gr.Accordion(label=i18n("Model fusion, can be used to test timbre fusion")):
                             with gr.Row():
                                 with gr.Column():
@@ -3003,21 +3003,21 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     value="40k",
                                     interactive=True,
                                 )
-                                
-                
+
+
                                 with gr.Column():
                                     ckpt_a = gr.Textbox(label=i18n("Path to Model A:"), value="", interactive=True, placeholder=i18n("Path to model"))
-                                
+
                                     ckpt_b = gr.Textbox(label=i18n("Path to Model B:"), value="", interactive=True, placeholder=i18n("Path to model"))
-                                
+
                                     info__ = gr.Textbox(
                                         label=i18n("Model information to be placed:"), value="", max_lines=8, interactive=True, placeholder=i18n("Model information to be placed")
                                     )
-                                    info4 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=8)                               
-                                
-                           
+                                    info4 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=8)
+
+
                             but6 = gr.Button(i18n("Fusion"), variant="primary")
-                                
+
                             but6.click(
                                 merge,
                                 [
@@ -3042,7 +3042,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     info_ = gr.Textbox(
                                         label=i18n("Model information to be modified:"), value="", max_lines=8, interactive=True,  placeholder=i18n("Model information to be placed")
                                     )
-                                
+
                                 with gr.Column():
                                     name_to_save1 = gr.Textbox(
                                         label=i18n("Save file name:"),
@@ -3050,11 +3050,11 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                         value="",
                                         max_lines=8,
                                         interactive=True,
-                                        
+
                                     )
-                                    
+
                                     info5 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=8)
-                            but7 = gr.Button(i18n("Modify"), variant="primary")        
+                            but7 = gr.Button(i18n("Modify"), variant="primary")
                             but7.click(change_info, [ckpt_path0, info_, name_to_save1], info5)
                     with gr.Group():
                         with gr.Accordion(label=i18n("View model information")):
@@ -3063,7 +3063,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                     ckpt_path1 = gr.Textbox(
                                         label=i18n("Path to Model:"), value="", interactive=True, placeholder=i18n("Path to model")
                                     )
-                                    
+
                                     info6 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=8)
                                     but8 = gr.Button(i18n("View"), variant="primary")
                             but8.click(show_info, [ckpt_path1], info6)
@@ -3091,10 +3091,10 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                             value="40k",
                                             interactive=True,
                                         )
-                                   
-                               with gr.Column():    
+
+                               with gr.Column():
                                       ckpt_path2 = gr.Textbox(
-                                       
+
                                         label=i18n("Path to Model:"),
                                         placeholder=i18n("Path to model"),
                                         interactive=True,
@@ -3102,10 +3102,10 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                       info___ = gr.Textbox(
                                         label=i18n("Model information to be placed:"), value="", max_lines=8, interactive=True, placeholder=i18n("Model information to be placed")
                                     )
-                                      info7 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=8)   
-                    
+                                      info7 = gr.Textbox(label=i18n("Output information:"), value="", max_lines=8)
+
                             with gr.Row():
-                                    
+
                                     but9 = gr.Button(i18n("Extract"), variant="primary")
                                     ckpt_path2.change(
                                         change_info_, [ckpt_path2], [sr__, if_f0__, version_1]
@@ -3116,9 +3116,9 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                                 info7,
                             )
 
-                
-                            
-        
+
+
+
             with gr.TabItem(i18n("Settings")):
                 with gr.Row():
                     gr.Markdown(value=
@@ -3129,7 +3129,7 @@ def GradioSetup(UTheme=gr.themes.Soft()):
                         value       = rvc_globals.NotesOrHertz,
                         interactive = True,
                     )
-            
+
             noteshertz.change(fn=lambda nhertz: rvc_globals.__setattr__('NotesOrHertz', nhertz), inputs=[noteshertz], outputs=[])
 
             noteshertz.change(
@@ -3148,17 +3148,17 @@ def GradioRun(app):
 
     if (
         config.iscolab or config.paperspace
-    ):  
+    ):
         app.queue(concurrency_count=concurrency_count, max_size=max_size).launch(
-        favicon_path="./images/icon.png",
+        favicon_path="./images/icon.png", share=True
         )
     else:
         app.queue(concurrency_count=concurrency_count, max_size=max_size).launch(
-        favicon_path=".\images\icon.png",
+        favicon_path=".\images\icon.png", share=True
         )
 
 if __name__ == "__main__":
-    if os.name == 'nt': 
+    if os.name == 'nt':
         print(i18n("Any ConnectionResetErrors post-conversion are irrelevant and purely visual; they can be ignored.\n"))
     app = GradioSetup(UTheme=config.grtheme)
     GradioRun(app)

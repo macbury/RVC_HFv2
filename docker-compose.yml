@@ -1,0 +1,15 @@
+version: '3'
+services:
+  rvc:
+    build: .
+    ports:
+      - 127.0.0.1:7860:7860
+    environment:
+      - MAX_DOWNLOAD_SIZE=1400
+    command: ["python", "app.py"]
+    volumes:
+      - ./tmp/weights:/app/weights
+      - ./tmp/opt/:/app/opt
+
+# use dockerfile from repo
+# https://huggingface.co/spaces/r3gm/RVC_HFv2/blob/main/Dockerfile
